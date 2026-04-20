@@ -1,0 +1,33 @@
+[0.522s] Invoking command in '/home/ramyelias/ros2_ws/build/robot_health_monitor': PYTHONPATH=/home/ramyelias/ros2_ws/build/robot_health_monitor/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ramyelias/ros2_ws/install/robot_health_monitor/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ramyelias/ros2_ws/build/robot_health_monitor/build --no-deps symlink_data
+[0.728s] running develop
+[0.849s] running egg_info
+[0.849s] creating robot_health_monitor.egg-info
+[0.849s] writing robot_health_monitor.egg-info/PKG-INFO
+[0.850s] writing dependency_links to robot_health_monitor.egg-info/dependency_links.txt
+[0.850s] writing entry points to robot_health_monitor.egg-info/entry_points.txt
+[0.852s] writing requirements to robot_health_monitor.egg-info/requires.txt
+[0.852s] writing top-level names to robot_health_monitor.egg-info/top_level.txt
+[0.852s] writing manifest file 'robot_health_monitor.egg-info/SOURCES.txt'
+[0.854s] reading manifest file 'robot_health_monitor.egg-info/SOURCES.txt'
+[0.854s] writing manifest file 'robot_health_monitor.egg-info/SOURCES.txt'
+[0.856s] running build_ext
+[0.857s] Creating /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/python3.10/site-packages/robot-health-monitor.egg-link (link to .)
+[0.858s] Installing health_aggregator_node script to /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/robot_health_monitor
+[0.858s] Installing ros_metrics_node script to /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/robot_health_monitor
+[0.858s] Installing system_metrics_node script to /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/robot_health_monitor
+[0.858s] Installing web_dashboard_node script to /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/robot_health_monitor
+[0.858s] 
+[0.858s] Installed /home/ramyelias/ros2_ws/build/robot_health_monitor
+[0.858s] running symlink_data
+[0.858s] creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/ament_index
+[0.858s] creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/ament_index/resource_index
+[0.858s] creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/ament_index/resource_index/packages
+[0.859s] symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/resource/robot_health_monitor -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/ament_index/resource_index/packages
+[0.859s] symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/package.xml -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor
+[0.859s] creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/launch
+[0.859s] symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/launch/health_monitor.launch.py -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/launch
+[0.859s] creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/config
+[0.859s] symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/config/health_config.yaml -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/config
+[0.859s] creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/web
+[0.859s] symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/web/index.html -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/web
+[0.882s] Invoked command in '/home/ramyelias/ros2_ws/build/robot_health_monitor' returned '0': PYTHONPATH=/home/ramyelias/ros2_ws/build/robot_health_monitor/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ramyelias/ros2_ws/install/robot_health_monitor/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ramyelias/ros2_ws/build/robot_health_monitor/build --no-deps symlink_data

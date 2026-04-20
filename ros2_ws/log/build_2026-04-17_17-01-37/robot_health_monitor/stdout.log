@@ -1,0 +1,31 @@
+running develop
+running egg_info
+creating robot_health_monitor.egg-info
+writing robot_health_monitor.egg-info/PKG-INFO
+writing dependency_links to robot_health_monitor.egg-info/dependency_links.txt
+writing entry points to robot_health_monitor.egg-info/entry_points.txt
+writing requirements to robot_health_monitor.egg-info/requires.txt
+writing top-level names to robot_health_monitor.egg-info/top_level.txt
+writing manifest file 'robot_health_monitor.egg-info/SOURCES.txt'
+reading manifest file 'robot_health_monitor.egg-info/SOURCES.txt'
+writing manifest file 'robot_health_monitor.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/python3.10/site-packages/robot-health-monitor.egg-link (link to .)
+Installing health_aggregator_node script to /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/robot_health_monitor
+Installing ros_metrics_node script to /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/robot_health_monitor
+Installing system_metrics_node script to /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/robot_health_monitor
+Installing web_dashboard_node script to /home/ramyelias/ros2_ws/install/robot_health_monitor/lib/robot_health_monitor
+
+Installed /home/ramyelias/ros2_ws/build/robot_health_monitor
+running symlink_data
+creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/ament_index
+creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/ament_index/resource_index
+creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/ament_index/resource_index/packages
+symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/resource/robot_health_monitor -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/ament_index/resource_index/packages
+symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/package.xml -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor
+creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/launch
+symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/launch/health_monitor.launch.py -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/launch
+creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/config
+symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/config/health_config.yaml -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/config
+creating /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/web
+symbolically linking /home/ramyelias/ros2_ws/build/robot_health_monitor/web/index.html -> /home/ramyelias/ros2_ws/install/robot_health_monitor/share/robot_health_monitor/web
