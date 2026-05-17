@@ -1,4 +1,0 @@
-flask
-psutil
-pyyaml
-setuptools
