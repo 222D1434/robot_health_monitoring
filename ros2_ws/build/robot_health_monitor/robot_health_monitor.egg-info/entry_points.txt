@@ -1,0 +1,6 @@
+[console_scripts]
+health_aggregator_node = robot_health_monitor.health_aggregator_node:main
+ros_metrics_node = robot_health_monitor.ros_metrics_node:main
+system_metrics_node = robot_health_monitor.system_metrics_node:main
+web_dashboard_node = robot_health_monitor.web_dashboard_node:main
+
