@@ -1,0 +1,53 @@
+# =============================================================================
+# config/health_config.yaml
+# Fichero de configuración centralizado para robot_health_monitor.
+# =============================================================================
+
+# --- Nodo: system_metrics_node ---
+system_metrics_node:
+  ros__parameters:
+    publish_rate: 1.0
+    cpu_warn_threshold: 75.0
+    cpu_error_threshold: 90.0
+    mem_warn_threshold: 70.0
+    mem_error_threshold: 85.0
+    disk_warn_threshold: 80.0
+    disk_error_threshold: 95.0
+    disk_path: "/"
+    temp_warn_threshold: 70.0
+    temp_error_threshold: 80.0
+    temp_enabled: true
+    net_interface: "wlan0"
+    net_min_bytes_per_sec: 100
+
+# --- Nodo: ros_metrics_node ---
+ros_metrics_node:
+  ros__parameters:
+    publish_rate: 1.0
+    # Listas en formato YAML estándar
+    topics_to_monitor: ["/scan", "/odom", "/imu"]
+    expected_hz_list: [5.0, 20.0, 20.0]
+    tolerance_list: [0.3, 0.3, 0.3]
+    
+    # Frames de Transformadas (TF)
+    tf_parent_frames: ["odom", "base_footprint"]
+    tf_child_frames: ["base_footprint", "base_scan"]
+    tf_timeouts: [2.0, 2.0]
+    
+    # Monitorización de nodos
+    expected_nodes: ["turtlebot3_node", "lidar_node"]
+    node_check_interval: 5.0
+
+# --- Nodo: health_aggregator_node ---
+health_aggregator_node:
+  ros__parameters:
+    publish_rate: 0.5
+    hysteresis_cycles: 3
+    window_size: 10
+
+# --- Nodo: web_dashboard_node ---
+web_dashboard_node:
+  ros__parameters:
+    port: 5050
+    web_dir: ""
+
