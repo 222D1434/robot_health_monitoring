@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-health_aggregator_node.py
-Nodo que centraliza diagnósticos y aplica histéresis.
+Aggregate diagnostic information from the robot health monitor.
+
+This module receives diagnostic data and publishes the global health status.
 """
 
 import sys
@@ -11,16 +12,17 @@ from collections import defaultdict, deque
 import rclpy
 from rclpy.node import Node
 from rcl_interfaces.msg import ParameterDescriptor
-from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
+from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus
 from std_msgs.msg import String
 
 # Mapa para texto legible
 LEVEL_STR = {
-    DiagnosticStatus.OK:    'OK',
-    DiagnosticStatus.WARN:  'WARN',
+    DiagnosticStatus.OK: 'OK',
+    DiagnosticStatus.WARN: 'WARN',
     DiagnosticStatus.ERROR: 'ERROR',
     DiagnosticStatus.STALE: 'STALE',
 }
+
 
 class HealthAggregatorNode(Node):
 
@@ -38,9 +40,11 @@ class HealthAggregatorNode(Node):
         for p in self.REQUIRED_PARAMS:
             self.declare_parameter(p, descriptor=descr)
 
-        self.cfg = {p: self.get_parameter(p).value for p in self.REQUIRED_PARAMS}
+        self.cfg = {p: self.get_parameter(
+            p).value for p in self.REQUIRED_PARAMS}
         if any(v is None for v in self.cfg.values()):
-            self.get_logger().fatal(f'Faltan parámetros en YAML: {[k for k,v in self.cfg.items() if v is None]}')
+            self.get_logger().fatal(
+                f'Faltan parámetros en YAML: {[k for k,v in self.cfg.items() if v is None]}')
             sys.exit(1)
 
         self._hysteresis = int(self.cfg['hysteresis_cycles'])
@@ -53,9 +57,15 @@ class HealthAggregatorNode(Node):
         self._change_counter = defaultdict(int)
 
         # 3. Suscripción y Publishers
-        self.create_subscription(DiagnosticArray, '/diagnostics', self._diag_callback, 10)
-        self.health_pub = self.create_publisher(DiagnosticArray, '/health_status', 10)
-        self.health_json_pub = self.create_publisher(String, '/health_status_json', 10)
+        self.create_subscription(
+            DiagnosticArray,
+            '/diagnostics',
+            self._diag_callback,
+            10)
+        self.health_pub = self.create_publisher(
+            DiagnosticArray, '/health_status', 10)
+        self.health_json_pub = self.create_publisher(
+            String, '/health_status_json', 10)
 
         # 4. Timer
         period = 1.0 / float(self.cfg['publish_rate'])
@@ -83,7 +93,7 @@ class HealthAggregatorNode(Node):
                 self._stable_level[name] = current
                 self._change_counter[name] = 0
             return self._stable_level[name]
-        
+
         self._change_counter[name] = 0
         return self._stable_level[name]
 
@@ -124,10 +134,11 @@ class HealthAggregatorNode(Node):
         json_data = {
             'global_status': LEVEL_STR.get(global_level, 'UNKNOWN'),
             'subsystems': {s: LEVEL_STR.get(l, 'UNKNOWN') for s, l in subsys_summary.items()},
-            'components': {n: {'level': LEVEL_STR.get(self._stable_level.get(n, 3), 'STALE'), 
+            'components': {n: {'level': LEVEL_STR.get(self._stable_level.get(n, 3), 'STALE'),
                                'message': s.message} for n, s in self._latest.items()}
         }
         self.health_json_pub.publish(String(data=json.dumps(json_data)))
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -140,6 +151,6 @@ def main(args=None):
         node.destroy_node()
         rclpy.shutdown()
 
+
 if __name__ == '__main__':
     main()
-

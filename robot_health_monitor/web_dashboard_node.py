@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 """
-web_dashboard_node.py
-Nodo ROS2 que sirve el Dashboard estático mediante http.server.
+Serve the web dashboard for the robot health monitor.
+
+This module starts a simple HTTP server to provide the dashboard interface.
 """
 
-import sys
-import os
 import http.server
+import os
+import sys
 import threading
 
 import rclpy
-from rclpy.node import Node
-from rcl_interfaces.msg import ParameterDescriptor
 from ament_index_python.packages import get_package_share_directory
+from rcl_interfaces.msg import ParameterDescriptor
+from rclpy.node import Node
 
 
 class WebDashboardNode(Node):
+    """Nodo ROS 2 encargado de servir el dashboard web."""
 
     REQUIRED_PARAMS = [
         'port',
@@ -23,57 +25,81 @@ class WebDashboardNode(Node):
     ]
 
     def __init__(self):
+        """Inicializa el nodo y arranca el servidor HTTP."""
         super().__init__('web_dashboard_node')
 
-        # ── 1. DECLARACIÓN DE PARÁMETROS ──────────────────────────────────────
         descr = ParameterDescriptor(dynamic_typing=True)
-        for p in self.REQUIRED_PARAMS:
-            self.declare_parameter(p, descriptor=descr)
+        for param_name in self.REQUIRED_PARAMS:
+            self.declare_parameter(param_name, descriptor=descr)
 
-        # ── 2. CARGAR Y VALIDAR ────────────────────────────────────────────────
-        self.cfg = {p: self.get_parameter(p).value for p in self.REQUIRED_PARAMS}
-        
-        # Validación estricta: si falta algún parámetro, el nodo muere
-        if any(v is None for v in self.cfg.values()):
-            missing = [k for k, v in self.cfg.items() if v is None]
-            self.get_logger().fatal(f'CRITICAL: Faltan parámetros en YAML: {missing}')
+        self.cfg = {
+            param_name: self.get_parameter(param_name).value
+            for param_name in self.REQUIRED_PARAMS
+        }
+
+        if any(value is None for value in self.cfg.values()):
+            missing = [
+                key for key, value in self.cfg.items()
+                if value is None
+            ]
+            self.get_logger().fatal(
+                f'CRITICAL: Faltan parámetros en YAML: {missing}'
+            )
             sys.exit(1)
 
         port = int(self.cfg['port'])
         web_dir = str(self.cfg['web_dir'])
 
-        # Resolución automática del directorio web si está vacío en el YAML
         if not web_dir:
             try:
-                pkg_share = get_package_share_directory('robot_health_monitor')
-                # Intentamos buscar en el share (instalado) o en el source
+                pkg_share = get_package_share_directory(
+                    'robot_health_monitor'
+                )
                 web_dir = os.path.join(pkg_share, 'web')
-            except Exception as e:
-                self.get_logger().fatal(f'CRITICAL: No se encuentra carpeta web/: {e}')
+            except Exception as exc:
+                self.get_logger().fatal(
+                    f'CRITICAL: No se encuentra carpeta web/: {exc}'
+                )
                 sys.exit(1)
 
         if not os.path.isdir(web_dir):
-            self.get_logger().fatal(f'CRITICAL: Directorio no existe: {web_dir}')
+            self.get_logger().fatal(
+                f'CRITICAL: Directorio no existe: {web_dir}'
+            )
             sys.exit(1)
 
-        # ── 3. SERVIDOR HTTP EN HILO DAEMON ────────────────────────────────────
-        # Usamos un lambda para inyectar el directorio en el handler
-        handler = lambda *args, **kwargs: http.server.SimpleHTTPRequestHandler(
-            *args, directory=web_dir, **kwargs
-        )
-        
+        def handler(*args, **kwargs):
+            return http.server.SimpleHTTPRequestHandler(
+                *args,
+                directory=web_dir,
+                **kwargs
+            )
+
         try:
-            self.server = http.server.HTTPServer(('0.0.0.0', port), handler)
-            self.server_thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+            self.server = http.server.HTTPServer(
+                ('0.0.0.0', port),
+                handler
+            )
+            self.server_thread = threading.Thread(
+                target=self.server.serve_forever,
+                daemon=True
+            )
             self.server_thread.start()
-            self.get_logger().info(f'WebDashboardNode: http://0.0.0.0:{port} -> {web_dir}')
-        except Exception as e:
-            self.get_logger().fatal(f'No se pudo iniciar el servidor web: {e}')
+            self.get_logger().info(
+                f'WebDashboardNode: http://0.0.0.0:{port} -> {web_dir}'
+            )
+        except Exception as exc:
+            self.get_logger().fatal(
+                f'No se pudo iniciar el servidor web: {exc}'
+            )
             sys.exit(1)
+
 
 def main(args=None):
+    """Punto de entrada principal del nodo."""
     rclpy.init(args=args)
     node = None
+
     try:
         node = WebDashboardNode()
         rclpy.spin(node)
@@ -84,6 +110,6 @@ def main(args=None):
             node.destroy_node()
         rclpy.shutdown()
 
+
 if __name__ == '__main__':
     main()
-

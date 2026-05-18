@@ -1,19 +1,20 @@
 """
-health_monitor.launch.py
-Launch file unificado para el paquete robot_health_monitor.
-Incluye rosbridge_websocket para comunicación con el dashboard web.
+Launch the robot health monitor system.
+
+This launch file starts the nodes required to monitor the robot health.
 """
 
 import os
 import sys
+
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
+from launch.actions import LogInfo, DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from launch.actions import LogInfo
 
 
 def generate_launch_description():
-    # 1. RESOLVER RUTA AL CONFIG YAML
     pkg_name = 'robot_health_monitor'
 
     try:
@@ -22,18 +23,20 @@ def generate_launch_description():
         print(f'[FATAL] No se encuentra el paquete "{pkg_name}": {e}')
         sys.exit(1)
 
-    config_path = os.path.join(pkg_share, 'config', 'health_config.yaml')
+    default_config_path = os.path.join(pkg_share, 'config', 'health_config.yaml')
+    config_file = LaunchConfiguration('config_file')
 
-    if not os.path.isfile(config_path):
-        print(f'[FATAL] Fichero de configuración no encontrado: {config_path}')
-        sys.exit(1)
+    declare_config_file_arg = DeclareLaunchArgument(
+        'config_file',
+        default_value=default_config_path,
+        description='Ruta al fichero YAML de configuración del sistema de monitorización'
+    )
 
-    # 2. DEFINICIÓN DE NODOS
     system_metrics_node = Node(
         package=pkg_name,
         executable='system_metrics_node',
         name='system_metrics_node',
-        parameters=[config_path],
+        parameters=[config_file],
         output='screen',
     )
 
@@ -41,7 +44,7 @@ def generate_launch_description():
         package=pkg_name,
         executable='ros_metrics_node',
         name='ros_metrics_node',
-        parameters=[config_path],
+        parameters=[config_file],
         output='screen',
     )
 
@@ -49,7 +52,7 @@ def generate_launch_description():
         package=pkg_name,
         executable='health_aggregator_node',
         name='health_aggregator_node',
-        parameters=[config_path],
+        parameters=[config_file],
         output='screen',
     )
 
@@ -57,11 +60,10 @@ def generate_launch_description():
         package=pkg_name,
         executable='web_dashboard_node',
         name='web_dashboard_node',
-        parameters=[config_path],
+        parameters=[config_file],
         output='screen',
     )
 
-    # 3. ROSBRIDGE WEBSOCKET (puerto 9090)
     rosbridge_node = Node(
         package='rosbridge_server',
         executable='rosbridge_websocket',
@@ -70,13 +72,12 @@ def generate_launch_description():
         output='screen',
     )
 
-    # 4. LAUNCH DESCRIPTION
     return LaunchDescription([
-        LogInfo(msg=f'[health_monitor] Cargando configuración desde: {config_path}'),
+        declare_config_file_arg,
+        LogInfo(msg=['[health_monitor] Cargando configuración desde: ', config_file]),
         system_metrics_node,
         ros_metrics_node,
         health_aggregator_node,
         web_dashboard_node,
         rosbridge_node,
     ])
-
